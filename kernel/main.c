@@ -4,7 +4,7 @@
 
 void kmain(multiboot_info_t* mb_info) {
     kclear();
-    kprint("Welcome to Hinix OS!\n");
+    kprint("Booting kernel...");
 
-    asm volatile ("hlt" : : );
+    for (;;) {}
 }

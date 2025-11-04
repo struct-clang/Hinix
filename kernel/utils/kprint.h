@@ -12,5 +12,6 @@ void kputc(char c, uint8_t color);
 void kprint(const char* str);
 void kset_cursor(uint8_t x, uint8_t y);
 void khide_cursor();
+void kprint_uint(uint32_t n);
 
 #endif

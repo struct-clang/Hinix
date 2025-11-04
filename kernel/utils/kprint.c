@@ -1,14 +1,11 @@
 #include "kprint.h"
+#include "x86.h"
 
 #define VIDEO_MEMORY 0xB8000
 
 static volatile uint16_t* vga = (volatile uint16_t*) VIDEO_MEMORY;
 static uint8_t cursor_x = 0;
 static uint8_t cursor_y = 0;
-
-static inline void outb(uint16_t port, uint8_t val) {
-    __asm__ volatile ("outb %0, %1" : : "a"(val), "Nd"(port));
-}
 
 static void update_hardware_cursor() {
     uint16_t pos = cursor_y * VGA_WIDTH + cursor_x;
@@ -69,4 +66,23 @@ void kset_cursor(uint8_t x, uint8_t y) {
 void khide_cursor() {
     outb(0x3D4, 0x0A);
     outb(0x3D5, 0x20);
+}
+
+void kprint_uint(uint32_t n) {
+    char buf[11];
+    int i = 10;
+    buf[i] = '\0';
+
+    if (n == 0) {
+        kprint("0");
+        return;
+    }
+
+    while (n > 0) {
+        i--;
+        buf[i] = '0' + (n % 10);
+        n /= 10;
+    }
+
+    kprint(&buf[i]);
 }
